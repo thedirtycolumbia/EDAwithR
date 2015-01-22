@@ -1,0 +1,526 @@
+--- 
+title       : Exploratory Data Analysis with R
+subtitle    : An introduction to R graphics packages
+author      : Joshua Galbraith
+job         : Chief Data Scientist at Network Redux
+framework   : io2012
+highlighter : highlight.js
+hitheme     : tomorrow
+mode        : selfcontained
+knit        : slidify::knit2slides
+---
+
+## Exploratory Data Analysis (EDA)
+
+<q>
+‘Exploratory data analysis’ is an attitude, a state of flexibility, a willingness to look for those things that we believe are not there, as well as those we believe to be there.
+</q>
+<div class="author">
+John Wilder Tukey
+</div>
+
+---
+
+## EDA
+
+# Tools
+
+* plots
+* graphs
+* summary statistics
+
+# Method
+
+* plotting distributions
+* plotting time series
+* transforming variables
+* looking at pairwise relationships
+* generating summary statistics
+
+--- &twocol
+
+## John Wilder Tukey (JWT)
+
+*** =left
+
+* taught mathematics and statistics at Princeton
+* worked as a mathematician at Bell Labs
+* served as a member of the President's Scientific Advisory Committee
+* codeveloped Cooley-Tukey FFT algorithm
+* coined the terms “bit” and “software”
+* introduced the box plot in his book, <em>Exploratory Data Analysis</em>
+* is considered the father of EDA and R
+
+*** =right
+
+<blockquote>
+“The introduction by Tukey of bits for binary digits has nothing but irresponsible vulgarity to commend it.”
+</blockquote>
+<cite>
+— L. Hogben and M. Cartwright
+</cite>
+
+<blockquote>
+“Then, in the late 1960s, John Tukey made statistical graphics respectable, putting an end to the view that graphics were only for decorating a few numbers.”
+</blockquote>
+
+<cite>
+— Edward R. Tufte
+</cite>
+
+--- &twocol
+
+## S
+
+*** =left
+
+* S is a statistical computing language designed and implemented by the statistics research departments at Bell Labs in the mid-1970s.
+
+* The commercial software available didn't answer the right questions and could not be modified.
+
+* Existing FORTRAN libraries developed at Bell Labs implemented statistical subroutines but did not offer an easy to use, interactive interface.
+
+*** =right
+
+<blockquote>
+“Better to have an approximate answer to the right question than a precise answer to the wrong question.”
+</blockquote>
+<cite>
+— John Tukey
+</cite>
+
+<blockquote>
+“enabling users to ask the ‘right’ question (and to get a usable answer)  
+is the most central design principle behind S”
+</blockquote>
+<cite>
+— John Chambers
+</cite>
+
+<blockquote>
+“we wanted to be able to interact with our data, using Exploratory Data Analysis techniques”
+</blockquote>
+<cite>
+— Rick Becker
+</cite>
+
+---
+
+## R
+
+* A programming language and an environment for statistical computing and graphics
+* Created in the 1990s at the University of Auckland by Ross Ihaka and Robert Gentleman 
+* Combines S syntax and features with memory management and scoping from Scheme
+* Currently developed by a core team including the creators, and S creator John Chambers
+
+<q>
+R is popular partly because it presents different faces to different users
+</q>
+
+<div class="author">
+Sylvia Tippmann in <em>Nature</em>
+</div>
+
+---
+
+## anscombe {datasets}
+
+```{r}
+str(anscombe)
+```
+
+---
+
+## Anscombe's Quartet - head()
+
+```{r}
+head(anscombe, 11)
+```
+
+---
+
+## Anscombe's Quartet - summary()
+
+```{r}
+summary(anscombe)
+```
+
+---
+
+## Anscombe's Quartet - mean(), var(), and cor()
+
+```{r, echo=FALSE, eval=TRUE}
+aq <- reshape(data = anscombe,
+              varying = list(c("x1","x2","x3","x4"),
+                             c("y1","y2","y3","y4")),
+              v.names = c("x","y"),
+              timevar = "dataset",
+              direction = "long")
+
+aq %>%
+  group_by(dataset) %>%
+  summarize(mean_x = mean(x), 
+            variance_x = var(x),
+            mean_y = mean(y),
+            variance_y = var(y),
+            correlation_xy = cor(x, y))
+```
+
+---
+
+## Anscombe's Quartet - coef() and lm()
+
+<!-- https://github.com/hadley/dplyr/issues/490 -->
+
+```{r, echo=FALSE, eval=TRUE}
+aq %>%
+  group_by(dataset) %>%
+  do(data.frame(coef(summary(lm(y ~ x, data = .)))))
+```
+
+---
+
+## Anscombe's Quartet - Plots
+
+```{r, echo=FALSE, eval=TRUE, fig.height=6, fig.width=11, fig.align='center', fig.retina=2}
+ggplot(aq, aes(x, y)) +
+  xlim(0,20) +
+  geom_point(shape = 1) +
+  geom_smooth(method = 'glm', se = FALSE, fullrange = TRUE) +
+  facet_wrap(~ dataset)
+```
+
+---
+
+## The Importance of Graphics for Data Analysis
+
+<q>
+The best single device for suggesting, and at times answering, questions beyond those originally posed is the graphical display.
+</q>
+<div class="author">
+JWT
+</div>
+
+---
+
+## Tufte's Principles of Analytical Design
+
+1. Show comparisons, contrasts, differences.
+2. Show causality, mechanism, explanation, systematic structure.
+3. Show multivariate data; that is, show more than 1 or 2 variables.
+4. Completely integrate words, numbers, images, diagrams.
+5. Thoroughly describe the evidence. Provide a detailed title, indicate the authors and sponsors, document the data sources, show complete measurement scales, point out relevant issues.
+6. Analytical presentations ultimately stand or fall depending on the quality, relevance, and integrity of their content.
+
+---
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## R Graphics Packages
+
+* Base - R functions for base graphics 
+    + additive plot creation
+* Lattice - an emphasis on multivariate data
+    + single function call for plot creation
+* ggplot2 - An implementation of the Grammar of Graphics in R
+    + combines additive plot creation with multidimensional conditioning and shared axes
+    + implements a consistent interface for mapping data to aesthetic attributes
+
+<em>Generally, functions cannot be mixed and matched between different plotting systems</em>
+
+---
+
+## Graphics Devices
+
+* Screen device
+    + Default 
+* File devices
+    + Bitmap (e.g. jpg, png) is better for a large number of points
+    + Vector (e.g. pdf, svg) is better for a small number of points
+* Copy plots to a device with `dev.copy()`
+* Close a graphics device with `dev.off()`
+
+---
+
+## msleep {ggplot2}
+
+```{r}
+str(msleep)
+```
+
+---
+
+## The R (Base) Graphics Package - Scatterplot Matrices
+
+```{r, fig.height=6, fig.width=11, fig.align='center', fig.retina=2}
+plot(msleep[6:11]) # same as pairs(subset(msleep, select = 6:11))
+```
+
+--- &twocol
+
+## The R (Base) Graphics Package - Boxplots
+
+*** =left
+
+```{r, fig.height=5, fig.width=5, fig.retina=2}
+with(msleep, boxplot(bodywt))
+```
+
+*** =right
+
+```{r, fig.height=5, fig.width=5, fig.retina=2}
+with(msleep, boxplot(log(bodywt)))
+```
+
+--- &twocol
+
+## The R (Base) Graphics Package - Histograms
+
+*** =left
+
+```{r, fig.height=5, fig.width=5, fig.retina=2}
+with(msleep, hist(sleep_cycle * 60))
+```
+
+*** =right
+
+```{r, fig.height=5, fig.width=5, fig.retina=2}
+with(msleep,
+     hist(log(sleep_cycle * 60)))
+```
+
+---
+
+## The R (Base) Graphics Package - Scatterplots
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+with(msleep, plot(log(bodywt), log(sleep_cycle * 60)))
+```
+
+---
+
+## The R (Base) Graphics Package - Regression Lines
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+with(msleep, plot(log(bodywt), log(sleep_cycle * 60)))
+fit <- lm(log(sleep_cycle * 60) ~ log(bodywt), msleep)
+abline(fit)
+```
+
+---
+
+## The R (Base) Graphics Package - Annotation
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+with(msleep,
+     plot(x = log(bodywt), y = log(sleep_cycle * 60),
+          xlab = 'ln(Body Mass (Kg))', ylab = 'ln(Sleep Cycle Time (min.))'))
+```
+
+---
+
+## The R (Base) Graphics Package - Annotation
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+with(msleep, plot(x = log(bodywt), y = log(sleep_cycle * 60), pch = 1, col = 'blue'))
+points(x = log(62), y = log(90), col = 'red', pch = 4, lwd = 2)
+legend('topleft', legend = 'Human', col = 'red', pch = 4, pt.lwd = 2)
+```
+
+---
+
+## The Lattice Graphics Package
+
+```{r, eval=FALSE}
+install.packages('lattice')
+library('lattice')
+```
+
+* Good for plotting high dimensional data
+* Faceting a.k.a. conditioning, trellising, or latticing
+    + Subset data into panels by one or more variables
+* Panel functions can be used to modify the panel content
+* Annotate and plot in one call; auto margins and spacing
+* Returns an object to be printed to a graphics device
+
+http://lmdvr.r-forge.r-project.org/
+
+---
+
+## mpg {ggplot2}
+
+```{r}
+str(mpg)
+```
+
+---
+
+## The Lattice Graphics Package - xyplot()
+
+```{r, fig.height=5, fig.width=13, fig.retina=2}
+xyplot(cty ~ displ | class, data = mpg)
+```
+
+---
+
+## The Lattice Graphics Package - xyplot()
+
+```{r, fig.height=5, fig.width=13, fig.retina=2}
+xyplot(cty ~ displ | model * as.factor(year),
+       data = subset(mpg, manufacturer == 'toyota'), type = c('p', 'g'))
+```
+
+---
+
+## The ggplot2 Graphics Package
+
+```{r, eval=FALSE}
+install.packages('ggplot2')
+library('ggplot2')
+```
+
+Plots are composed by combining:
+* A default dataset and aesthetic mapping
+* Layers
+    + Geometric objects
+    + Statistical transformations
+    + Positional adjustments
+    + A dataset and aesthetic mapping (optional)
+* A scale for each aesthetic mapping 
+* A coordinate system
+* Faceting
+
+---
+
+## movies {ggplot2}
+
+```{r}
+str(movies[1:12])
+```
+
+---
+
+## movies {ggplot2}
+
+```{r}
+str(movies[13:24])
+```
+
+---
+
+## The ggplot2 Graphic Package - Histograms 
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+gg <- ggplot(movies, aes(x = rating))
+gg + geom_histogram(binwidth = .3)
+```
+
+---
+
+## The ggplot2 Graphic Package - Histograms 
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+# gg <- ggplot(movies, aes(x = rating))
+gg + geom_histogram(binwidth = .3, aes(weight = votes)) + ylab('votes')
+```
+
+---
+
+## The ggplot2 Graphics Package - Density Plots
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+# gg <- ggplot(movies, aes(x = rating))
+gg + geom_density(aes(color = mpaa))
+```
+
+---
+
+## The ggplot2 Graphics Package - Density Plots
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+# gg <- ggplot(movies, aes(x = rating))
+gg + geom_density(aes(fill = factor(Documentary)), alpha = .5)
+```
+
+---
+
+## The ggplot2 Graphics Package - Scatter Plots
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+sp <- ggplot(subset(movies, !is.na(budget)), aes(x = year, y = budget))
+sp + geom_point() + scale_y_continuous(labels = dollar)
+```
+
+---
+
+## The ggplot2 Graphics Package - Scatter Plots
+
+```{r, fig.height=5, fig.width=9, fig.align='center', fig.retina=2}
+ggplot(subset(movies, mpaa != ''), aes(x = year, y = rating)) +
+  geom_point() + facet_wrap(~ mpaa)
+```
+
+---
+
+## UCBAdmissions {datasets}
+
+```{r}
+str(UCBAdmissions)
+```
+
+---
+
+## The ggplot2 Graphics Package - Simpson's Paradox
+
+```{r, fig.height=5, fig.width=7, fig.align='center', fig.retina=2}
+ggplot(data.frame(UCBAdmissions), aes(x = Admit, y = Freq, fill = Gender)) +
+  geom_bar(stat='identity', position='dodge')
+```
+
+---
+
+## The ggplot2 Graphics Package - Simpson's Paradox
+
+```{r, fig.height=5, fig.width=9, fig.align='center', fig.retina=2}
+ggplot(data.frame(UCBAdmissions), aes(x = Admit, y = Freq, fill = Gender)) +
+  geom_bar(stat='identity', position='dodge') + facet_wrap(~ Dept)
+```
+
+---
+
+## High-Dimensional Data Analysis
+
+# Clustering
+
+* Clustering is one type of method for visualizing high dimensional data.
+* It requires defining notions of distance and grouping (merge strategy).
+* Outliers, missing data, and difference of scale will affect clustering.
+
+# Dimensionality Reduction
+
+* Dimensionality reduction is a way of reducing the number of variables in a data set.
+* This can be accomplished by either subsetting or transforming the original data set.
+* Transformations map data from a high dimensional space to a lower dimensional space.
+
+--- .refs
+
+## References
+
+O'Neil, Cathy; Schutt, Rachel. "Statistical Inference, Exploratory Data Analysis, and the Data Science Process." In Doing Data Science: Straight Talk from the Frontline. Sebastopol, Cali.: O'Reilly Media, 2013.
+
+Brillinger, David R. "Feature Articles-John Wilder Tukey (1915-2000)-The author remembers a scientist who discovered the fast Fourier transform, changed the language of statistics, and counseled US presidents." Notices of the American Mathematical Society 49, no. 2 (2002): 193-201.
+
+Becker, Richard A. "A brief history of S." cahier de recherche, AT&T Bell Labora (1994).
+
+Ihaka, Ross. "R: Past and future history." COMPUTING SCIENCE AND STATISTICS (1998): 392-396.
+
+Tippmann, Sylvia. "Programming tools: Adventures with R." Nature 517, no. 7532 (2015): 109-110.
+
+Tufte, Edward R. "The Fundamental Principles of Analytical Design." In Beautiful Evidence. Cheshire, Conn.: Graphics Press, 2006.
+
+Wickham, Hadley. "A layered grammar of graphics." Journal of Computational and Graphical Statistics 19, no. 1 (2010): 3-28.
+
+Peng, Roger D., et. al. "Course materials for the Johns Hopkins Data Science Specialization on Coursera." https://github.com/DataScienceSpecialization/courses/tree/master/04_ExploratoryAnalysis

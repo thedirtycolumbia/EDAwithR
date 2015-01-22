@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exploratory Data Analysis with R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Exploratory Data Analysis with R">
+  <meta name="author" content="Joshua Galbraith">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/custom.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Exploratory Data Analysis with R</h1>
+    <h2>An introduction to R graphics packages</h2>
+    <p>Joshua Galbraith<br/>Chief Data Scientist at Network Redux</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Exploratory Data Analysis (EDA)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><q>
+‘Exploratory data analysis’ is an attitude, a state of flexibility, a willingness to look for those things that we believe are not there, as well as those we believe to be there.
+</q></p>
+
+<div class="author">
+John Wilder Tukey
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>EDA</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Tools</h1>
+
+<ul>
+<li>plots</li>
+<li>graphs</li>
+<li>summary statistics</li>
+</ul>
+
+<h1>Method</h1>
+
+<ul>
+<li>plotting distributions</li>
+<li>plotting time series</li>
+<li>transforming variables</li>
+<li>looking at pairwise relationships</li>
+<li>generating summary statistics</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>John Wilder Tukey (JWT)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>taught mathematics and statistics at Princeton</li>
+<li>worked as a mathematician at Bell Labs</li>
+<li>served as a member of the President&#39;s Scientific Advisory Committee</li>
+<li>codeveloped Cooley-Tukey FFT algorithm</li>
+<li>coined the terms “bit” and “software”</li>
+<li>introduced the box plot in his book, <em>Exploratory Data Analysis</em></li>
+<li>is considered the father of EDA and R</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <blockquote>
+“The introduction by Tukey of bits for binary digits has nothing but irresponsible vulgarity to commend it.”
+</blockquote>
+
+<p><cite>
+— L. Hogben and M. Cartwright
+</cite></p>
+
+<blockquote>
+“Then, in the late 1960s, John Tukey made statistical graphics respectable, putting an end to the view that graphics were only for decorating a few numbers.”
+</blockquote>
+
+<p><cite>
+— Edward R. Tufte
+</cite></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>S</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li><p>S is a statistical computing language designed and implemented by the statistics research departments at Bell Labs in the mid-1970s.</p></li>
+<li><p>The commercial software available didn&#39;t answer the right questions and could not be modified.</p></li>
+<li><p>Existing FORTRAN libraries developed at Bell Labs implemented statistical subroutines but did not offer an easy to use, interactive interface.</p></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <blockquote>
+“Better to have an approximate answer to the right question than a precise answer to the wrong question.”
+</blockquote>
+
+<p><cite>
+— John Tukey
+</cite></p>
+
+<blockquote>
+“enabling users to ask the ‘right’ question (and to get a usable answer)  
+is the most central design principle behind S”
+</blockquote>
+
+<p><cite>
+— John Chambers
+</cite></p>
+
+<blockquote>
+“we wanted to be able to interact with our data, using Exploratory Data Analysis techniques”
+</blockquote>
+
+<p><cite>
+— Rick Becker
+</cite></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>R</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>A programming language and an environment for statistical computing and graphics</li>
+<li>Created in the 1990s at the University of Auckland by Ross Ihaka and Robert Gentleman </li>
+<li>Combines S syntax and features with memory management and scoping from Scheme</li>
+<li>Currently developed by a core team including the creators, and S creator John Chambers</li>
+</ul>
+
+<p><q>
+R is popular partly because it presents different faces to different users
+</q></p>
+
+<div class="author">
+Sylvia Tippmann in <em>Nature</em>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>anscombe {datasets}</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(anscombe)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    11 obs. of  8 variables:
+##  $ x1: num  10 8 13 9 11 14 6 4 12 7 ...
+##  $ x2: num  10 8 13 9 11 14 6 4 12 7 ...
+##  $ x3: num  10 8 13 9 11 14 6 4 12 7 ...
+##  $ x4: num  8 8 8 8 8 8 8 19 8 8 ...
+##  $ y1: num  8.04 6.95 7.58 8.81 8.33 ...
+##  $ y2: num  9.14 8.14 8.74 8.77 9.26 8.1 6.13 3.1 9.13 7.26 ...
+##  $ y3: num  7.46 6.77 12.74 7.11 7.81 ...
+##  $ y4: num  6.58 5.76 7.71 8.84 8.47 7.04 5.25 12.5 5.56 7.91 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Anscombe&#39;s Quartet - head()</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">head(anscombe, 11)
+</code></pre>
+
+<pre><code>##    x1 x2 x3 x4    y1   y2    y3    y4
+## 1  10 10 10  8  8.04 9.14  7.46  6.58
+## 2   8  8  8  8  6.95 8.14  6.77  5.76
+## 3  13 13 13  8  7.58 8.74 12.74  7.71
+## 4   9  9  9  8  8.81 8.77  7.11  8.84
+## 5  11 11 11  8  8.33 9.26  7.81  8.47
+## 6  14 14 14  8  9.96 8.10  8.84  7.04
+## 7   6  6  6  8  7.24 6.13  6.08  5.25
+## 8   4  4  4 19  4.26 3.10  5.39 12.50
+## 9  12 12 12  8 10.84 9.13  8.15  5.56
+## 10  7  7  7  8  4.82 7.26  6.42  7.91
+## 11  5  5  5  8  5.68 4.74  5.73  6.89
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Anscombe&#39;s Quartet - summary()</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">summary(anscombe)
+</code></pre>
+
+<pre><code>##        x1             x2             x3             x4    
+##  Min.   : 4.0   Min.   : 4.0   Min.   : 4.0   Min.   : 8  
+##  1st Qu.: 6.5   1st Qu.: 6.5   1st Qu.: 6.5   1st Qu.: 8  
+##  Median : 9.0   Median : 9.0   Median : 9.0   Median : 8  
+##  Mean   : 9.0   Mean   : 9.0   Mean   : 9.0   Mean   : 9  
+##  3rd Qu.:11.5   3rd Qu.:11.5   3rd Qu.:11.5   3rd Qu.: 8  
+##  Max.   :14.0   Max.   :14.0   Max.   :14.0   Max.   :19  
+##        y1               y2              y3              y4        
+##  Min.   : 4.260   Min.   :3.100   Min.   : 5.39   Min.   : 5.250  
+##  1st Qu.: 6.315   1st Qu.:6.695   1st Qu.: 6.25   1st Qu.: 6.170  
+##  Median : 7.580   Median :8.140   Median : 7.11   Median : 7.040  
+##  Mean   : 7.501   Mean   :7.501   Mean   : 7.50   Mean   : 7.501  
+##  3rd Qu.: 8.570   3rd Qu.:8.950   3rd Qu.: 7.98   3rd Qu.: 8.190  
+##  Max.   :10.840   Max.   :9.260   Max.   :12.74   Max.   :12.500
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Anscombe&#39;s Quartet - mean(), var(), and cor()</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>## Source: local data frame [4 x 6]
+## 
+##   dataset mean_x variance_x   mean_y variance_y correlation_xy
+## 1       1      9         11 7.500909   4.127269      0.8164205
+## 2       2      9         11 7.500909   4.127629      0.8162365
+## 3       3      9         11 7.500000   4.122620      0.8162867
+## 4       4      9         11 7.500909   4.123249      0.8165214
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Anscombe&#39;s Quartet - coef() and lm()</h2>
+  </hgroup>
+  <article data-timings="">
+    <!-- https://github.com/hadley/dplyr/issues/490 -->
+
+<pre><code>## Source: local data frame [8 x 5]
+## Groups: dataset
+## 
+##   dataset  Estimate Std..Error  t.value    Pr...t..
+## 1       1 3.0000909  1.1247468 2.667348 0.025734051
+## 2       1 0.5000909  0.1179055 4.241455 0.002169629
+## 3       2 3.0009091  1.1253024 2.666758 0.025758941
+## 4       2 0.5000000  0.1179637 4.238590 0.002178816
+## 5       3 3.0024545  1.1244812 2.670080 0.025619109
+## 6       3 0.4997273  0.1178777 4.239372 0.002176305
+## 7       4 3.0017273  1.1239211 2.670763 0.025590425
+## 8       4 0.4999091  0.1178189 4.243028 0.002164602
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Anscombe&#39;s Quartet - Plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="792" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>The Importance of Graphics for Data Analysis</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><q>
+The best single device for suggesting, and at times answering, questions beyond those originally posed is the graphical display.
+</q></p>
+
+<div class="author">
+JWT
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Tufte&#39;s Principles of Analytical Design</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Show comparisons, contrasts, differences.</li>
+<li>Show causality, mechanism, explanation, systematic structure.</li>
+<li>Show multivariate data; that is, show more than 1 or 2 variables.</li>
+<li>Completely integrate words, numbers, images, diagrams.</li>
+<li>Thoroughly describe the evidence. Provide a detailed title, indicate the authors and sponsors, document the data sources, show complete measurement scales, point out relevant issues.</li>
+<li>Analytical presentations ultimately stand or fall depending on the quality, relevance, and integrity of their content.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <article data-timings="">
+    <style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+<h2>R Graphics Packages</h2>
+
+<ul>
+<li>Base - R functions for base graphics 
+
+<ul>
+<li>additive plot creation</li>
+</ul></li>
+<li>Lattice - an emphasis on multivariate data
+
+<ul>
+<li>single function call for plot creation</li>
+</ul></li>
+<li>ggplot2 - An implementation of the Grammar of Graphics in R
+
+<ul>
+<li>combines additive plot creation with multidimensional conditioning and shared axes</li>
+<li>implements a consistent interface for mapping data to aesthetic attributes</li>
+</ul></li>
+</ul>
+
+<p><em>Generally, functions cannot be mixed and matched between different plotting systems</em></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Graphics Devices</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Screen device
+
+<ul>
+<li>Default </li>
+</ul></li>
+<li>File devices
+
+<ul>
+<li>Bitmap (e.g. jpg, png) is better for a large number of points</li>
+<li>Vector (e.g. pdf, svg) is better for a small number of points</li>
+</ul></li>
+<li>Copy plots to a device with <code>dev.copy()</code></li>
+<li>Close a graphics device with <code>dev.off()</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>msleep {ggplot2}</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(msleep)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    83 obs. of  11 variables:
+##  $ name        : chr  &quot;Cheetah&quot; &quot;Owl monkey&quot; &quot;Mountain beaver&quot; &quot;Greater short-tailed shrew&quot; ...
+##  $ genus       : chr  &quot;Acinonyx&quot; &quot;Aotus&quot; &quot;Aplodontia&quot; &quot;Blarina&quot; ...
+##  $ vore        : Factor w/ 4 levels &quot;carni&quot;,&quot;herbi&quot;,..: 1 4 2 4 2 2 1 NA 1 2 ...
+##  $ order       : chr  &quot;Carnivora&quot; &quot;Primates&quot; &quot;Rodentia&quot; &quot;Soricomorpha&quot; ...
+##  $ conservation: Factor w/ 7 levels &quot;&quot;,&quot;cd&quot;,&quot;domesticated&quot;,..: 5 NA 6 5 3 NA 7 NA 3 5 ...
+##  $ sleep_total : num  12.1 17 14.4 14.9 4 14.4 8.7 7 10.1 3 ...
+##  $ sleep_rem   : num  NA 1.8 2.4 2.3 0.7 2.2 1.4 NA 2.9 NA ...
+##  $ sleep_cycle : num  NA NA NA 0.133 0.667 ...
+##  $ awake       : num  11.9 7 9.6 9.1 20 9.6 15.3 17 13.9 21 ...
+##  $ brainwt     : num  NA 0.0155 NA 0.00029 0.423 NA NA NA 0.07 0.0982 ...
+##  $ bodywt      : num  50 0.48 1.35 0.019 600 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Scatterplot Matrices</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">plot(msleep[6:11]) # same as pairs(subset(msleep, select = 6:11))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="792" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Boxplots</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code class="r">with(msleep, boxplot(bodywt))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="360" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">with(msleep, boxplot(log(bodywt)))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="360" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Histograms</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code class="r">with(msleep, hist(sleep_cycle * 60))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="360" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">with(msleep,
+     hist(log(sleep_cycle * 60)))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="360" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Scatterplots</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">with(msleep, plot(log(bodywt), log(sleep_cycle * 60)))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Regression Lines</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">with(msleep, plot(log(bodywt), log(sleep_cycle * 60)))
+fit &lt;- lm(log(sleep_cycle * 60) ~ log(bodywt), msleep)
+abline(fit)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Annotation</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">with(msleep,
+     plot(x = log(bodywt), y = log(sleep_cycle * 60),
+          xlab = &#39;ln(Body Mass (Kg))&#39;, ylab = &#39;ln(Sleep Cycle Time (min.))&#39;))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>The R (Base) Graphics Package - Annotation</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">with(msleep, plot(x = log(bodywt), y = log(sleep_cycle * 60), pch = 1, col = &#39;blue&#39;))
+points(x = log(62), y = log(90), col = &#39;red&#39;, pch = 4, lwd = 2)
+legend(&#39;topleft&#39;, legend = &#39;Human&#39;, col = &#39;red&#39;, pch = 4, pt.lwd = 2)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>The Lattice Graphics Package</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">install.packages(&#39;lattice&#39;)
+library(&#39;lattice&#39;)
+</code></pre>
+
+<ul>
+<li>Good for plotting high dimensional data</li>
+<li>Faceting a.k.a. conditioning, trellising, or latticing
+
+<ul>
+<li>Subset data into panels by one or more variables</li>
+</ul></li>
+<li>Panel functions can be used to modify the panel content</li>
+<li>Annotate and plot in one call; auto margins and spacing</li>
+<li>Returns an object to be printed to a graphics device</li>
+</ul>
+
+<p><a href="http://lmdvr.r-forge.r-project.org/">http://lmdvr.r-forge.r-project.org/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>mpg {ggplot2}</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(mpg)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    234 obs. of  11 variables:
+##  $ manufacturer: Factor w/ 15 levels &quot;audi&quot;,&quot;chevrolet&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ model       : Factor w/ 38 levels &quot;4runner 4wd&quot;,..: 2 2 2 2 2 2 2 3 3 3 ...
+##  $ displ       : num  1.8 1.8 2 2 2.8 2.8 3.1 1.8 1.8 2 ...
+##  $ year        : int  1999 1999 2008 2008 1999 1999 2008 1999 1999 2008 ...
+##  $ cyl         : int  4 4 4 4 6 6 6 4 4 4 ...
+##  $ trans       : Factor w/ 10 levels &quot;auto(av)&quot;,&quot;auto(l3)&quot;,..: 4 9 10 1 4 9 1 9 4 10 ...
+##  $ drv         : Factor w/ 3 levels &quot;4&quot;,&quot;f&quot;,&quot;r&quot;: 2 2 2 2 2 2 2 1 1 1 ...
+##  $ cty         : int  18 21 20 21 16 18 18 18 16 20 ...
+##  $ hwy         : int  29 29 31 30 26 26 27 26 25 28 ...
+##  $ fl          : Factor w/ 5 levels &quot;c&quot;,&quot;d&quot;,&quot;e&quot;,&quot;p&quot;,..: 4 4 4 4 4 4 4 4 4 4 ...
+##  $ class       : Factor w/ 7 levels &quot;2seater&quot;,&quot;compact&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>The Lattice Graphics Package - xyplot()</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">xyplot(cty ~ displ | class, data = mpg)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="936" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>The Lattice Graphics Package - xyplot()</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">xyplot(cty ~ displ | model * as.factor(year),
+       data = subset(mpg, manufacturer == &#39;toyota&#39;), type = c(&#39;p&#39;, &#39;g&#39;))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="936" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">install.packages(&#39;ggplot2&#39;)
+library(&#39;ggplot2&#39;)
+</code></pre>
+
+<p>Plots are composed by combining:</p>
+
+<ul>
+<li>A default dataset and aesthetic mapping</li>
+<li>Layers
+
+<ul>
+<li>Geometric objects</li>
+<li>Statistical transformations</li>
+<li>Positional adjustments</li>
+<li>A dataset and aesthetic mapping (optional)</li>
+</ul></li>
+<li>A scale for each aesthetic mapping </li>
+<li>A coordinate system</li>
+<li>Faceting</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>movies {ggplot2}</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(movies[1:12])
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    58788 obs. of  12 variables:
+##  $ title : chr  &quot;$&quot; &quot;$1000 a Touchdown&quot; &quot;$21 a Day Once a Month&quot; &quot;$40,000&quot; ...
+##  $ year  : int  1971 1939 1941 1996 1975 2000 2002 2002 1987 1917 ...
+##  $ length: int  121 71 7 70 71 91 93 25 97 61 ...
+##  $ budget: int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ rating: num  6.4 6 8.2 8.2 3.4 4.3 5.3 6.7 6.6 6 ...
+##  $ votes : int  348 20 5 6 17 45 200 24 18 51 ...
+##  $ r1    : num  4.5 0 0 14.5 24.5 4.5 4.5 4.5 4.5 4.5 ...
+##  $ r2    : num  4.5 14.5 0 0 4.5 4.5 0 4.5 4.5 0 ...
+##  $ r3    : num  4.5 4.5 0 0 0 4.5 4.5 4.5 4.5 4.5 ...
+##  $ r4    : num  4.5 24.5 0 0 14.5 14.5 4.5 4.5 0 4.5 ...
+##  $ r5    : num  14.5 14.5 0 0 14.5 14.5 24.5 4.5 0 4.5 ...
+##  $ r6    : num  24.5 14.5 24.5 0 4.5 14.5 24.5 14.5 0 44.5 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>movies {ggplot2}</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(movies[13:24])
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    58788 obs. of  12 variables:
+##  $ r7         : num  24.5 14.5 0 0 0 4.5 14.5 14.5 34.5 14.5 ...
+##  $ r8         : num  14.5 4.5 44.5 0 0 4.5 4.5 14.5 14.5 4.5 ...
+##  $ r9         : num  4.5 4.5 24.5 34.5 0 14.5 4.5 4.5 4.5 4.5 ...
+##  $ r10        : num  4.5 14.5 24.5 45.5 24.5 14.5 14.5 14.5 24.5 4.5 ...
+##  $ mpaa       : Factor w/ 5 levels &quot;&quot;,&quot;NC-17&quot;,&quot;PG&quot;,..: 1 1 1 1 1 1 5 1 1 1 ...
+##  $ Action     : int  0 0 0 0 0 0 1 0 0 0 ...
+##  $ Animation  : int  0 0 1 0 0 0 0 0 0 0 ...
+##  $ Comedy     : int  1 1 0 1 0 0 0 0 0 0 ...
+##  $ Drama      : int  1 0 0 0 0 1 1 0 1 0 ...
+##  $ Documentary: int  0 0 0 0 0 0 0 1 0 0 ...
+##  $ Romance    : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Short      : int  0 0 1 0 0 0 0 1 0 0 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphic Package - Histograms</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">gg &lt;- ggplot(movies, aes(x = rating))
+gg + geom_histogram(binwidth = .3)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphic Package - Histograms</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># gg &lt;- ggplot(movies, aes(x = rating))
+gg + geom_histogram(binwidth = .3, aes(weight = votes)) + ylab(&#39;votes&#39;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package - Density Plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># gg &lt;- ggplot(movies, aes(x = rating))
+gg + geom_density(aes(color = mpaa))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package - Density Plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># gg &lt;- ggplot(movies, aes(x = rating))
+gg + geom_density(aes(fill = factor(Documentary)), alpha = .5)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package - Scatter Plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">sp &lt;- ggplot(subset(movies, !is.na(budget)), aes(x = year, y = budget))
+sp + geom_point() + scale_y_continuous(labels = dollar)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-28-1.png" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package - Scatter Plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(subset(movies, mpaa != &#39;&#39;), aes(x = year, y = rating)) +
+  geom_point() + facet_wrap(~ mpaa)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-29-1.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="648" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>UCBAdmissions {datasets}</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(UCBAdmissions)
+</code></pre>
+
+<pre><code>##  table [1:2, 1:2, 1:6] 512 313 89 19 353 207 17 8 120 205 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 3
+##   ..$ Admit : chr [1:2] &quot;Admitted&quot; &quot;Rejected&quot;
+##   ..$ Gender: chr [1:2] &quot;Male&quot; &quot;Female&quot;
+##   ..$ Dept  : chr [1:6] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package - Simpson&#39;s Paradox</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(data.frame(UCBAdmissions), aes(x = Admit, y = Freq, fill = Gender)) +
+  geom_bar(stat=&#39;identity&#39;, position=&#39;dodge&#39;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-31-1.png" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="504" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>The ggplot2 Graphics Package - Simpson&#39;s Paradox</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">ggplot(data.frame(UCBAdmissions), aes(x = Admit, y = Freq, fill = Gender)) +
+  geom_bar(stat=&#39;identity&#39;, position=&#39;dodge&#39;) + facet_wrap(~ Dept)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="648" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  <hgroup>
+    <h2>High-Dimensional Data Analysis</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Clustering</h1>
+
+<ul>
+<li>Clustering is one type of method for visualizing high dimensional data.</li>
+<li>It requires defining notions of distance and grouping (merge strategy).</li>
+<li>Outliers, missing data, and difference of scale will affect clustering.</li>
+</ul>
+
+<h1>Dimensionality Reduction</h1>
+
+<ul>
+<li>Dimensionality reduction is a way of reducing the number of variables in a data set.</li>
+<li>This can be accomplished by either subsetting or transforming the original data set.</li>
+<li>Transformations map data from a high dimensional space to a lower dimensional space.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="refs" id="slide-41" style="background:;">
+  <hgroup>
+    <h2>References</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>O&#39;Neil, Cathy; Schutt, Rachel. &quot;Statistical Inference, Exploratory Data Analysis, and the Data Science Process.&quot; In Doing Data Science: Straight Talk from the Frontline. Sebastopol, Cali.: O&#39;Reilly Media, 2013.</p>
+
+<p>Brillinger, David R. &quot;Feature Articles-John Wilder Tukey (1915-2000)-The author remembers a scientist who discovered the fast Fourier transform, changed the language of statistics, and counseled US presidents.&quot; Notices of the American Mathematical Society 49, no. 2 (2002): 193-201.</p>
+
+<p>Becker, Richard A. &quot;A brief history of S.&quot; cahier de recherche, AT&amp;T Bell Labora (1994).</p>
+
+<p>Ihaka, Ross. &quot;R: Past and future history.&quot; COMPUTING SCIENCE AND STATISTICS (1998): 392-396.</p>
+
+<p>Tippmann, Sylvia. &quot;Programming tools: Adventures with R.&quot; Nature 517, no. 7532 (2015): 109-110.</p>
+
+<p>Tufte, Edward R. &quot;The Fundamental Principles of Analytical Design.&quot; In Beautiful Evidence. Cheshire, Conn.: Graphics Press, 2006.</p>
+
+<p>Wickham, Hadley. &quot;A layered grammar of graphics.&quot; Journal of Computational and Graphical Statistics 19, no. 1 (2010): 3-28.</p>
+
+<p>Peng, Roger D., et. al. &quot;Course materials for the Johns Hopkins Data Science Specialization on Coursera.&quot; <a href="https://github.com/DataScienceSpecialization/courses/tree/master/04_ExploratoryAnalysis">https://github.com/DataScienceSpecialization/courses/tree/master/04_ExploratoryAnalysis</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Exploratory Data Analysis (EDA)'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='EDA'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='John Wilder Tukey (JWT)'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='S'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='R'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='anscombe {datasets}'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Anscombe&#39;s Quartet - head()'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Anscombe&#39;s Quartet - summary()'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Anscombe&#39;s Quartet - mean(), var(), and cor()'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Anscombe&#39;s Quartet - coef() and lm()'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Anscombe&#39;s Quartet - Plots'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='The Importance of Graphics for Data Analysis'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Tufte&#39;s Principles of Analytical Design'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title=''>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Graphics Devices'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='msleep {ggplot2}'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='The R (Base) Graphics Package - Scatterplot Matrices'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='The R (Base) Graphics Package - Boxplots'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='The R (Base) Graphics Package - Histograms'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='The R (Base) Graphics Package - Scatterplots'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='The R (Base) Graphics Package - Regression Lines'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='The R (Base) Graphics Package - Annotation'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='The R (Base) Graphics Package - Annotation'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='The Lattice Graphics Package'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='mpg {ggplot2}'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='The Lattice Graphics Package - xyplot()'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='The Lattice Graphics Package - xyplot()'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='The ggplot2 Graphics Package'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='movies {ggplot2}'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='movies {ggplot2}'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='The ggplot2 Graphic Package - Histograms'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='The ggplot2 Graphic Package - Histograms'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='The ggplot2 Graphics Package - Density Plots'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='The ggplot2 Graphics Package - Density Plots'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='The ggplot2 Graphics Package - Scatter Plots'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='The ggplot2 Graphics Package - Scatter Plots'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='UCBAdmissions {datasets}'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='The ggplot2 Graphics Package - Simpson&#39;s Paradox'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='The ggplot2 Graphics Package - Simpson&#39;s Paradox'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='High-Dimensional Data Analysis'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='References'>
+         41
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

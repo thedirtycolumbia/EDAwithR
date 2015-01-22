@@ -1,0 +1,17 @@
+.title-slide {
+  background-color: #FF6633
+}
+.title-slide hgroup > h1,
+.title-slide hgroup > h2,
+.title-slide hgroup > p {
+  color: #FFFFFF
+}
+em {
+  font-style: italic
+}
+.vala {
+  overflow:hidden;
+}
+slide.refs p {
+  font-size: 67%
+}
