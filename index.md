@@ -5,7 +5,7 @@ author      : Joshua Galbraith
 job         : Chief Data Scientist at Network Redux
 framework   : io2012
 highlighter : highlight.js
-hitheme     : tomorrow
+hitheme     : tomorrow_night
 mode        : selfcontained
 knit        : slidify::knit2slides
 ---
