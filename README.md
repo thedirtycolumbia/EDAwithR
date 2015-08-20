@@ -4,6 +4,8 @@ Code and slides for the talk "Exploratory Data Analysis with R" presented at the
 
 http://www.meetup.com/Portland-Data-Science-Workshops/events/218944940/
 
+http://www.meetup.com/portland-r-user-group/events/224290472/
+
 Theses slides were created with [Slidify](http://slidify.org/index.html).
 
     install.packages('devtools')
